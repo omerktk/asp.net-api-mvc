@@ -1,34 +1,117 @@
-﻿@using ProjectAPI.Models
-@model IEnumerable<Class1>
-
-@{
-    Layout = null;
-}
-
+﻿@{ Layout = null; }
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <table cellpadding="0" cellspacing="0">
-        <tr>
-            <th>Customer Id</th>
-            <th>Contact Name</th>
-            <th>Country</th>
-        </tr>
-        @foreach (Class1 customer in Model)
-        {
-    <tr>
-        <td>@customer.id</td>
-        <td>@customer.name</td>
-        <td>@customer.pro</td>
-        <td>@customer.phone</td>
-        <td>@customer.photo</td>
-    </tr>
-        }
-    </table>
+    <div class="container">
+        <h3>Working with asp.net mvc + MySQL</h3>
+        <h4>get post put delete</h4>
+        <h5>data type JSON</h5>
+        <hr />
+        <a target="_blank" class="btn btn-primary" href="@Url.Action("emp","api")">Api Get</a><p style="color:green">["<span style="color:blue">http://3.111.217.33/api/emp</span>"]</p>
+        <br><br>
+        <form method="post" action="@Url.Action("emp","api")" target="_blank">
+            <input type="number" placeholder="ID" name="id" required />
+            <input value="Api get one" type="submit" /><p style="color:green">method post {id="1"} ["<span style="color:blue">http://3.111.217.33/api/emp</span>"]</p>
+        </form>
+        <hr />
+
+    </div>
+    <div class="container">
+        <form method="post" action='@Url.Action("post","api")' target="_blank">
+            <input type="text" placeholder="Name" name="name" />
+            <input type="text" placeholder="Postion" name="pro" />
+            <input type="text" placeholder="Phone" name="phone" />
+            <input type="text" placeholder="Photo Link" name="photo" />
+
+            <input value="Api Post Data" type="submit" /><p style="color:green">method post {name="omer", pro="ceo",phone="0333333333"} ["<span style="color:blue">http://3.111.217.33/api/post</span>"]</p>
+        </form>
+        <hr />
+
+
+    </div>
+    <div class="container">
+        <form method="post" action="@Url.Action("put","api")" target="_blank">
+            <input type="number" placeholder="ID" name="idl" />
+            <input value="=" size="1" readonly />
+            <input type="text" placeholder="Name" name="name" />
+            <input type="text" placeholder="Postion" name="pro" />
+            <input type="text" placeholder="Phone" name="phone" />
+            <input type="text" placeholder="Photo Link" name="photo" />
+            <input value="Api Put Data" type="submit" /><p style="color:green">method post {id="1", name="omer", pro="ceo",phone="0333333333",photo="photo link"} ["<span style="color:blue">http://3.111.217.33/api/put</span>"]</p>
+        </form>
+    </div>
+    <hr />
+    <div class="container">
+        <form method="get" action="@Url.Action("delete","api")" target="_blank">
+            <input type="number" placeholder="ID" name="id" required/>
+            <input value="Api delete by id" type="submit" /><p style="color:green">method="get" delete {id="1"} ["<span style="color:blue">http://3.111.217.33/api/delete/<span style="color:red">yourid</span></span>"]</p>
+        </form>
+    </div>
+    <hr />
+    <div class="container">
+        <h3>Data output examples and exceptions</h3>
+
+        <h5>[{"id":1,"name":"Muhammad Omer","pro":"CEO","phone":"02154"}]</h5>
+        <h5>{"query":"success"}</h5>
+        <h5>{"query":"error"}</h5>
+        <h5>{"query":"empty"}</h5>
+
+
+
+    </div>
+    <hr />
+
+    <div class="container">
+        <h2>Api Table</h2>
+        <p>json data fetch from javascript...</p>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Postion</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody id="data-output">
+            </tbody>
+        </table>
+    </div>
+    <hr />
 </body>
+<script>
+    fetch("@Url.Action("emp","api")")
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (products) {
+            let placeholder = document.querySelector("#data-output");
+            let out = "";
+            for (let product of products) {
+                out += `
+         <tr>
+
+            <td>${product.id}</td>
+            <td>${product.name}</td>
+            <td>${product.pro}</td>
+            <td>${product.phone}</td>
+            <td> <img src='${product.photo}' width="50" height="50"> </td>
+         </tr>
+      `;
+            }
+
+            placeholder.innerHTML = out;
+        });
+
+</script>
 </html>
